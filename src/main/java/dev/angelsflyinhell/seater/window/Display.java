@@ -1,7 +1,6 @@
 package dev.angelsflyinhell.seater.window;
 
 import dev.angelsflyinhell.seater.window.graphics.PixelManager;
-import dev.angelsflyinhell.seater.window.graphics.Sequence;
 import dev.angelsflyinhell.seater.window.graphics.SequenceHandler;
 import dev.angelsflyinhell.seater.window.graphics.SpriteUtil;
 
