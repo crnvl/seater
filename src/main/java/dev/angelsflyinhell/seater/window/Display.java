@@ -54,7 +54,7 @@ public class Display extends JPanel implements Runnable {
                 }
                 frames++;
 
-                if(frames % 60 == 0)
+                if(frames % 24 == 0)
                     SequenceHandler.updateAnimations(pixelManager);
 
                 Thread.sleep((long) remainingTime);
