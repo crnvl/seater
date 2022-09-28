@@ -1,6 +1,9 @@
 package dev.angelsflyinhell.seater.window;
 
 import dev.angelsflyinhell.seater.window.graphics.PixelManager;
+import dev.angelsflyinhell.seater.window.graphics.Sequence;
+import dev.angelsflyinhell.seater.window.graphics.SequenceHandler;
+import dev.angelsflyinhell.seater.window.graphics.SpriteUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +17,7 @@ public class Display extends JPanel implements Runnable {
     long frames;
 
     public Display(int resolution, int scalingFactor) {
-        System.out.println("-> Creating new display (" + resolution * scalingFactor + "px)");
+        System.out.println("Created new display (" + resolution * scalingFactor + "px)");
 
         this.scalingFactor = scalingFactor;
         this.resolution = resolution;
@@ -27,6 +30,11 @@ public class Display extends JPanel implements Runnable {
         graphicsManager = new Thread(this);
         pixelManager = new PixelManager(resolution);
 
+        SpriteUtil.renderToDisplay(pixelManager, "background", 0, 0);
+        SequenceHandler.addAnimation("title_screen", 5, 0, 0);
+        SequenceHandler.addAnimation("press_btn", 2, 0, 75);
+
+        SequenceHandler.updateAnimations(pixelManager);
         graphicsManager.start();
     }
 
@@ -42,10 +50,13 @@ public class Display extends JPanel implements Runnable {
                 double remainingTime = (nextDrawTime - System.nanoTime()) / 1_000_000;
 
                 if (remainingTime < 0) {
-                    System.out.println("Rendering took longer than expected. Took " + Math.sqrt(Math.pow(remainingTime, 2)) + "ms.");
+                    System.out.println("Frame " + frames + " took " + Math.sqrt(Math.pow(remainingTime, 2)) + "ms.");
                     remainingTime = 0;
                 }
                 frames++;
+
+                if(frames % 60 == 0)
+                    SequenceHandler.updateAnimations(pixelManager);
 
                 Thread.sleep((long) remainingTime);
                 nextDrawTime += drawInterval;
@@ -59,11 +70,7 @@ public class Display extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        System.out.print("Frame " + frames + "\r");
-        Color testing = new Color((int) frames % 256, (int) 0 % 256, (int) frames % 256);
-        for (int i = 0; i < resolution; i++) {
-            pixelManager.setPixel((int) i, (int) frames % resolution, testing);
-        }
+        System.out.print("[live] Frame " + frames + "\r");
 
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
