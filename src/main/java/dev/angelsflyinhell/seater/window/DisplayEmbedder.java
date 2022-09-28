@@ -10,6 +10,7 @@ public class DisplayEmbedder {
         frame.setSize(resolution * scale, resolution * scale);
         frame.setTitle("Display Test | seater v0.0.1 alpha, SNAPSHOT 2209a");
         frame.setResizable(false);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         Display display = new Display(resolution, scale);
         frame.add(display);
